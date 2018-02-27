@@ -63,6 +63,9 @@ UKF::UKF() {
   //Define Spreading Parameter
   lambda_ =  3 - n_aug_;
   
+  //set measurement dimension, radar can measure r, phi, and r_dot
+  n_z_ = 3;
+  
   //create vector for weights
   weights_ = VectorXd(2*n_aug_ + 1);
   
@@ -294,4 +297,14 @@ void UKF::UpdateRadar(MeasurementPackage meas_package) {
 
   You'll also need to calculate the radar NIS.
   */
+  //create matrix for sigma points in measurement space
+  MatrixXd Zsig = MatrixXd(n_z_, 2 * n_aug_ + 1);
+
+  //mean predicted measurement
+  VectorXd z_pred = VectorXd(n_z_);
+  
+  //measurement covariance matrix S
+  MatrixXd S = MatrixXd(n_z_,n_z_);
+  
+  
 }

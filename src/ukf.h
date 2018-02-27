@@ -64,6 +64,9 @@ public:
   ///* Augmented state dimension
   int n_aug_;
 
+  ///* measurement dimension, radar can measure r, phi, and r_dot
+  int n_z_;
+  
   ///* Sigma point spreading parameter
   double lambda_;
 
