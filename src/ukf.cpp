@@ -54,6 +54,15 @@ UKF::UKF() {
 
   Hint: one or more values initialized above might be wildly off...
   */
+  //Set State Dimension
+  n_x_ = 5;
+  
+  //Define Spreading Parameter
+  lambda_ =  3 - n_x_;
+  
+  //set augmented dimension
+  n_aug_ = 7;
+  
 }
 
 UKF::~UKF() {}
