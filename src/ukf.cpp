@@ -30,10 +30,10 @@ UKF::UKF() {
         0, 0, 0, 0, 1;
 
   // Process noise standard deviation longitudinal acceleration in m/s^2
-  std_a_ = 0.2;
+  std_a_ = 2;
 
   // Process noise standard deviation yaw acceleration in rad/s^2
-  std_yawdd_ = 0.2;
+  std_yawdd_ = 0.5;
   
   //DO NOT MODIFY measurement noise values below these are provided by the sensor manufacturer.
   // Laser measurement noise standard deviation position1 in m
@@ -124,6 +124,7 @@ void UKF::ProcessMeasurement(MeasurementPackage meas_package) {
 		//float vx = rho_dot * cos(phi);
 		//float vy = rho_dot * sin(phi);
 		
+		//NOTE: Got this tip from EKF project review and also video 32 Lesson 8
 		x_ << x, y, 0, 0, 0;
     }
     else if (meas_package.sensor_type_ == MeasurementPackage::LASER) {
@@ -163,6 +164,9 @@ void UKF::Prediction(double delta_t) {
   // NOTE: The below is not required.
   // This is from videos 13 to 15 of Lesson 8
   // Move directly to augmented sigma points section.
+  
+  // ***********************************************************
+  // ***********************************************************
   
   //create sigma point matrix
   //MatrixXd Xsig = MatrixXd(n_x_, 2 * n_x_ + 1);
