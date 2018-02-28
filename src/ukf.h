@@ -30,6 +30,12 @@ public:
 
   ///* predicted sigma points matrix
   MatrixXd Xsig_pred_;
+  
+  ///* Radar measurement noise covariance matrix
+  MatrixXd R_radar_;
+  
+  ///* Laser measurement noise covariance matrix
+  MatrixXd R_laser_;
 
   ///* time when the state is true, in us
   long long time_us_;
@@ -72,6 +78,12 @@ public:
 
   ///* previous timestamp
   long long previous_timestamp_;
+  
+  ///* Radar NIS
+  double NIS_radar_;
+
+  ///* Lidar NIS
+  double NIS_lidar_;
 
   /**
    * Constructor

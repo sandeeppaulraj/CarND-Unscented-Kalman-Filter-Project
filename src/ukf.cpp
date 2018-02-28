@@ -23,6 +23,11 @@ UKF::UKF() {
 
   // initial covariance matrix
   P_ = MatrixXd(5, 5);
+  P_ << 1, 0, 0, 0, 0,
+        0, 1, 0, 0, 0,
+        0, 0, 1, 0, 0,
+        0, 0, 0, 1, 0,
+        0, 0, 0, 0, 1;
 
   // Process noise standard deviation longitudinal acceleration in m/s^2
   std_a_ = 0.2;
@@ -69,6 +74,17 @@ UKF::UKF() {
   //create vector for weights
   weights_ = VectorXd(2*n_aug_ + 1);
   
+  //Radar measurement noise covariance matrix
+  R_radar_ = MatrixXd(n_z_,n_z_);
+  R_radar_ <<    std_radr_*std_radr_, 0, 0,
+          0, std_radphi_*std_radphi_, 0,
+          0, 0,std_radrd_*std_radrd_;
+  
+  // Radar NIS
+  NIS_radar_ = 0;
+  
+  // Lidar NIS
+  NIS_lidar_ = 0;
 }
 
 UKF::~UKF() {}
@@ -274,14 +290,10 @@ void UKF::Prediction(double delta_t) {
  * @param {MeasurementPackage} meas_package
  */
 void UKF::UpdateLidar(MeasurementPackage meas_package) {
-  /**
-  TODO:
 
-  Complete this function! Use lidar data to update the belief about the object's
-  position. Modify the state vector, x_, and covariance, P_.
 
-  You'll also need to calculate the lidar NIS.
-  */
+
+
 }
 
 /**
@@ -289,14 +301,6 @@ void UKF::UpdateLidar(MeasurementPackage meas_package) {
  * @param {MeasurementPackage} meas_package
  */
 void UKF::UpdateRadar(MeasurementPackage meas_package) {
-  /**
-  TODO:
-
-  Complete this function! Use radar data to update the belief about the object's
-  position. Modify the state vector, x_, and covariance, P_.
-
-  You'll also need to calculate the radar NIS.
-  */
   //create matrix for sigma points in measurement space
   MatrixXd Zsig = MatrixXd(n_z_, 2 * n_aug_ + 1);
 
@@ -363,11 +367,7 @@ void UKF::UpdateRadar(MeasurementPackage meas_package) {
   }
 
   //add measurement noise covariance matrix
-  MatrixXd R = MatrixXd(n_z_,n_z_);
-  R <<    std_radr_*std_radr_, 0, 0,
-          0, std_radphi_*std_radphi_, 0,
-          0, 0,std_radrd_*std_radrd_;
-  S = S + R;
+  S = S + R_radar_;
   
   //Kalman gain K;
   MatrixXd K = Tc * S.inverse();
@@ -385,4 +385,5 @@ void UKF::UpdateRadar(MeasurementPackage meas_package) {
   x_ = x_ + K * z_diff1;
   P_ = P_ - K*S*K.transpose();
   
+  NIS_radar_ = z_diff1.transpose() * S.inverse() * z_diff1;
 }
