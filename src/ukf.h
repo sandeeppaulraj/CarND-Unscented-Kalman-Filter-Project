@@ -73,6 +73,9 @@ public:
   ///* measurement dimension, radar can measure r, phi, and r_dot
   int n_z_;
   
+  ///* measurement dimension for lidar
+  int n_l_;
+  
   ///* Sigma point spreading parameter
   double lambda_;
 
